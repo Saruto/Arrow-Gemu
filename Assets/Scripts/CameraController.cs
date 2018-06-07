@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour {
 		if(LockCursor) Cursor.lockState = CursorLockMode.Locked;
 	}
 	
-	//  --------- Update ---------  //
+	//  --------- LateUpdate ---------  //
 	void LateUpdate () {
 		// Move the camera's position if they moved.
 		if(playerPosLastFrame != Player.transform.position) {

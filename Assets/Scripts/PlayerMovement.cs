@@ -4,25 +4,22 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 	// ----------------------------------- Fields and Properties ----------------------------------- //
-
 	
 	// Components on this Character Gameobject
-	Rigidbody rb;
-	CharacterController charController;
-
+	public CharacterController charController { get; private set; }
 	Vector3 moveDirection = Vector3.zero;
 
 	// The camera's forwards and right vectors, parallel to the XZ plane
 	Vector3 cameraPlanarForwards {
 		get {
-			Vector3 camFwd = Camera.transform.forward;
+			Vector3 camFwd = Camera.main.transform.forward;
 			camFwd.y = 0;
 			return camFwd.normalized;
 		}
 	}
 	Vector3 cameraPlanarRight {
 		get {
-			Vector3 camRight = Camera.transform.right;
+			Vector3 camRight = Camera.main.transform.right;
 			camRight.y = 0;
 			return camRight.normalized;
 		}
@@ -30,9 +27,6 @@ public class PlayerMovement : MonoBehaviour {
 
 
 	//  --------- Serialized Fields ---------  //
-
-	// The camera gameobject.
-	[SerializeField] GameObject Camera;
 
 	// Speed of movement
 	[SerializeField] float MovementSpeed;
@@ -51,7 +45,6 @@ public class PlayerMovement : MonoBehaviour {
 
 	//  --------- Start ---------  //
 	void Start () {
-		rb = GetComponent<Rigidbody>();
 		charController = GetComponent<CharacterController>();
 	}
 	
@@ -96,9 +89,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	// Rotates the player towards the direction they're moving.
-	void RotateTowardsMovement() {
-		float step = RotationSpeed * Time.deltaTime;
-		
+	void RotateTowardsMovement() {		
 		// Get movement direction vector. Based on velocity and input direction.
 		Vector3 facingDirection = Vector3.zero;
 		// X and Z components based on input
@@ -119,7 +110,7 @@ public class PlayerMovement : MonoBehaviour {
 			facingDirection.y = 0f;
 		}
 
-		Vector3 newDir = Vector3.RotateTowards(transform.forward, facingDirection, RotationSpeed, 0f);
+		Vector3 newDir = Vector3.RotateTowards(transform.forward, facingDirection, RotationSpeed * Time.deltaTime, 0f);
 		transform.rotation = Quaternion.LookRotation(newDir);
 	}
 
