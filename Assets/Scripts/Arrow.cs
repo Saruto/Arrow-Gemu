@@ -10,7 +10,12 @@ public class Arrow : MonoBehaviour {
 
 	//  --------- Serialized Fields ---------  //
 
+	// Amount of damage an arrow deals
 	[SerializeField] int ArrowDamage;
+
+	// Should Arrows stick to enemies?
+	enum StickToEnemies { No, Random, Yes }
+	[SerializeField] StickToEnemies ArrowsStick;
 
 	// ------------------------------------------ Methods ------------------------------------------ //
 
@@ -31,6 +36,18 @@ public class Arrow : MonoBehaviour {
 			// Deal damage
 			collision.collider.GetComponent<EnemyStats>().TakeDamage(ArrowDamage);
 			dealtDamage = true;
+
+			// Stick to the enemy.
+			if(ArrowsStick == StickToEnemies.Yes || (ArrowsStick == StickToEnemies.Random && Random.value > 0.5f)){
+				Rigidbody rb = GetComponent<Rigidbody>();
+				rb.velocity = Vector3.zero;
+				// push the arrow a bit inside the enemy
+				//transform.position += 0.2f * (collision.contacts[0].point - transform.position).normalized;
+				Destroy(rb);
+				Destroy(GetComponent<Collider>());
+				transform.SetParent(collision.collider.transform);
+			}
+
 		}
 	}
 
