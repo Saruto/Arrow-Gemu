@@ -25,6 +25,9 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
+	// Number of available mid-air jumps left for the player.
+	int airJumpsLeft = 1;
+
 
 	//  --------- Serialized Fields ---------  //
 
@@ -76,8 +79,14 @@ public class PlayerMovement : MonoBehaviour {
 		moveDirection.z *= MovementSpeed;
 
 		// --- Jumping --- //
-		if(Input.GetKeyDown(KeyCode.Space) && charController.isGrounded) {
+		if(Input.GetKeyDown(KeyCode.Space) && (charController.isGrounded || airJumpsLeft > 0)) {
 			moveDirection.y = JumpingSpeed;
+			if(!charController.isGrounded) --airJumpsLeft;
+		}
+
+		// Reset jumpsleft while gounded.
+		else if(charController.isGrounded) {
+			airJumpsLeft = 1;
 		}
 
 		// --- Applying Movement --- //

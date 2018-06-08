@@ -8,6 +8,16 @@ public class CameraController : MonoBehaviour {
 	// The position of the player last frame.
 	Vector3 playerPosLastFrame;
 
+	// The ideal distance from the player the camera wants to be at.
+	float distanceFromPlayer;
+
+
+
+	// Maximum/Minimum values for the camera.
+	const float MinDistance = 1f;
+	const float MaxDistance = 10f;
+
+
 	//  --------- Serialized Fields ---------  //
 
 	// The player gameobject
@@ -31,14 +41,20 @@ public class CameraController : MonoBehaviour {
 	
 	//  --------- LateUpdate ---------  //
 	void LateUpdate () {
-		// Move the camera's position if they moved.
+		// --- Follow the player --- //
 		if(playerPosLastFrame != Player.transform.position) {
 			transform.position += Player.transform.position - playerPosLastFrame;
 		}
 		playerPosLastFrame = Player.transform.position;
 
-		// Rotate the camera based on the player's mouse movements.
+		// --- Horizontal Rotation Controls --- //
 		float h = HorizontalSpeed * Input.GetAxis("Mouse X");
 		transform.RotateAround(Player.transform.position, Vector3.up, h);
+
+		// --- Vertical Rotation Controls --- //
+		float v = VerticalSpeed * Input.GetAxis("Mouse Y");
+		transform.RotateAround(Player.transform.position, transform.right, -v);
+		//print(v);
+
 	}
 }
