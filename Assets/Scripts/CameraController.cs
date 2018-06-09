@@ -54,7 +54,7 @@ public class CameraController : MonoBehaviour {
 		// --- Vertical Rotation Controls --- //
 		float v = VerticalSpeed * Input.GetAxis("Mouse Y");
 		transform.RotateAround(Player.transform.position, transform.right, -v);
-		//print(v);
 
+		Debug.DrawRay(transform.position, transform.forward * 500, Color.red);
 	}
 }

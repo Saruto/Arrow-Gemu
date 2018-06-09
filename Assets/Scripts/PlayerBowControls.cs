@@ -96,14 +96,13 @@ public class PlayerBowControls : MonoBehaviour {
 	// If TrueAim is false, then it will fire parallel with the ground.
 	void FireArrow(bool trueAim) {
 		const float startForwardsOffset = 1f;	// amount forwards the arrow should spawn in in.
-		const float startUpOffset = 1f;
+		const float startUpOffset = 0.7f;
 		Quaternion arrowRot;
 		Vector3 forceDir;
 		if(!trueAim) {
 			forceDir = cameraPlanarForwards;
 			arrowRot = Quaternion.Euler(0f, Camera.main.transform.rotation.eulerAngles.y, 0f);
 		} else {
-			// TODO: Need to adjust these to compensate for the fact that the camera rotation won't give us the correct angle to shoot from the player
 			// Calculates the angle the player needs to shoot at by finding the target spot via raycasting.
 			Vector3 targetPoint;
 			RaycastHit hit;
@@ -111,10 +110,11 @@ public class PlayerBowControls : MonoBehaviour {
 			if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDist)) {
 				targetPoint = hit.point;
 			} else {
-				// TODO: This case doesn't work as expected, look into it.
-				targetPoint = maxDist * Camera.main.transform.forward;
+				// If there's no hit, create a "pretend" target spot at maxDist units away.
+				targetPoint = maxDist * Camera.main.transform.forward + Camera.main.transform.position;
 			}
-			forceDir = (targetPoint - transform.position).normalized;
+			Vector3 arrowStartPos = transform.position + startUpOffset * transform.up;
+			forceDir = (targetPoint - arrowStartPos).normalized;
 			arrowRot = Quaternion.LookRotation(forceDir);
 		}
 		// Spawn the arrow in, set its starting position.
@@ -124,6 +124,8 @@ public class PlayerBowControls : MonoBehaviour {
 		// Push it forwads.
 		arrow.GetComponent<Rigidbody>().AddForce(ArrowForce * forceDir, ForceMode.Impulse);
 		Destroy(arrow, 5f);
+
+		Debug.DrawRay(arrow.transform.position, forceDir * 500, Color.green, 2f);
 	}
 
 }
