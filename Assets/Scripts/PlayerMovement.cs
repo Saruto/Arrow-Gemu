@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour {
 	//  --------- Serialized Fields ---------  //
 
 	// Speed of movement
-	[SerializeField] float MovementSpeed;
+	public float MovementSpeed;
 
 	// Speed of movement
 	[SerializeField] float JumpingSpeed;
