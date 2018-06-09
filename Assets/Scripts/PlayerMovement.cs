@@ -9,6 +9,13 @@ public class PlayerMovement : MonoBehaviour {
 	public CharacterController charController { get; private set; }
 	Vector3 moveDirection = Vector3.zero;
 
+	// Number of available mid-air jumps left for the player.
+	int airJumpsLeft = 1;
+
+	// Locks the player's rotation to that of the camera when active.
+	// Used by the bow controller.
+	public bool LookWithCamera = false;
+
 	// The camera's forwards and right vectors, parallel to the XZ plane
 	Vector3 cameraPlanarForwards {
 		get {
@@ -24,10 +31,6 @@ public class PlayerMovement : MonoBehaviour {
 			return camRight.normalized;
 		}
 	}
-
-	// Number of available mid-air jumps left for the player.
-	int airJumpsLeft = 1;
-
 
 	//  --------- Serialized Fields ---------  //
 
@@ -94,11 +97,15 @@ public class PlayerMovement : MonoBehaviour {
 		charController.Move(moveDirection * Time.deltaTime);
 
 		// --- Rotation --- //
-		RotateTowardsMovement();
+		if(LookWithCamera){
+			transform.rotation = Quaternion.LookRotation(cameraPlanarForwards);
+		} else {
+			RotateTowardsMovement();
+		}
 	}
 
 	// Rotates the player towards the direction they're moving.
-	void RotateTowardsMovement() {		
+	void RotateTowardsMovement() {
 		// Get movement direction vector. Based on velocity and input direction.
 		Vector3 facingDirection = Vector3.zero;
 		// X and Z components based on input

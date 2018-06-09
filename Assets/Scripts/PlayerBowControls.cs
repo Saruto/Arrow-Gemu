@@ -62,6 +62,7 @@ public class PlayerBowControls : MonoBehaviour {
 			if(Input.GetMouseButtonDown(1)) {
 				CurrentState = State.Focused;
 				playerMovement.MovementSpeed *= ZoomedMoveSpeedMultiplier;
+				playerMovement.LookWithCamera = true;
 				TargetingRedicle.SetActive(true);
 			}
 			break;
@@ -73,6 +74,7 @@ public class PlayerBowControls : MonoBehaviour {
 			if(!Input.GetMouseButton(1)) {
 				CurrentState = State.Normal;
 				playerMovement.MovementSpeed /= ZoomedMoveSpeedMultiplier;
+				playerMovement.LookWithCamera = false;
 				TargetingRedicle.SetActive(false);
 			}
 
