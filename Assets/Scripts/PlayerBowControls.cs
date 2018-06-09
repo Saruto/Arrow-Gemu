@@ -97,12 +97,23 @@ public class PlayerBowControls : MonoBehaviour {
 		const float startUpOffset = 1f;
 		Quaternion arrowRot;
 		Vector3 forceDir;
-		if(trueAim) {
-			arrowRot = Camera.main.transform.rotation;
-			forceDir = Camera.main.transform.forward;
-		} else {
-			arrowRot = Quaternion.Euler(0f, Camera.main.transform.rotation.eulerAngles.y, 0f);
+		if(!trueAim) {
 			forceDir = cameraPlanarForwards;
+			arrowRot = Quaternion.Euler(0f, Camera.main.transform.rotation.eulerAngles.y, 0f);
+		} else {
+			// TODO: Need to adjust these to compensate for the fact that the camera rotation won't give us the correct angle to shoot from the player
+			// Calculates the angle the player needs to shoot at by finding the target spot via raycasting.
+			Vector3 targetPoint;
+			RaycastHit hit;
+			const float maxDist = 200f;
+			if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDist)) {
+				targetPoint = hit.point;
+			} else {
+				// TODO: This case doesn't work as expected, look into it.
+				targetPoint = maxDist * Camera.main.transform.forward;
+			}
+			forceDir = (targetPoint - transform.position).normalized;
+			arrowRot = Quaternion.LookRotation(forceDir);
 		}
 		// Spawn the arrow in, set its starting position.
 		GameObject arrow = Instantiate(ArrowPrefab, transform.position, arrowRot);
