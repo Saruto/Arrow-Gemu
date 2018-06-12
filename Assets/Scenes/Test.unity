@@ -611,11 +611,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 54409584005919008, guid: dff0599908728df46a6e866f92680b17,
-        type: 2}
-      propertyPath: m_Mass
-      value: 0.08
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dff0599908728df46a6e866f92680b17, type: 2}
   m_IsPrefabParent: 0
@@ -664,9 +659,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea76346d94cc533499d5fbee9e57c084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LookWithCamera: 0
   MovementSpeed: 15
-  JumpingSpeed: 8
+  JumpingSpeed: 10
   RotationSpeed: 7
   Gravity: 20
 --- !u!143 &1465811446
@@ -682,7 +676,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.84
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.4
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}

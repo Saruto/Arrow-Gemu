@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Locks the player's rotation to that of the camera when active.
 	// Used by the bow controller.
-	public bool LookWithCamera = false;
+	[NonSerialized] public bool LookWithCamera = false;
 
 	// The camera's forwards and right vectors, parallel to the XZ plane
 	Vector3 cameraPlanarForwards {
@@ -91,6 +92,13 @@ public class PlayerMovement : MonoBehaviour {
 		else if(charController.isGrounded) {
 			airJumpsLeft = 1;
 		}
+
+		/*
+		// Set the player's upwards velocity to 0 when releasing the space key mid jump ("glass ceiling effect")
+		if(Input.GetKeyUp(KeyCode.Space) && !charController.isGrounded && moveDirection.y > 0) {
+			moveDirection.y = 0f;
+		}
+		*/
 
 		// --- Applying Movement --- //
 		moveDirection.y -= Gravity * Time.deltaTime;
