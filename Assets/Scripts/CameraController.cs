@@ -8,14 +8,17 @@ public class CameraController : MonoBehaviour {
 	// The position of the player last frame.
 	Vector3 playerPosLastFrame;
 
+	// The yaw (left-right) and pitch (up-down) of the camera
+	float yaw;
+	float pitch;
+
 	// The ideal distance from the player the camera wants to be at.
-	float distanceFromPlayer;
-
-
-
-	// Maximum/Minimum values for the camera.
+	float distanceFromPlayer = 9.275f;
 	const float MinDistance = 1f;
 	const float MaxDistance = 10f;
+
+
+
 
 
 	//  --------- Serialized Fields ---------  //
@@ -41,6 +44,10 @@ public class CameraController : MonoBehaviour {
 	
 	//  --------- LateUpdate ---------  //
 	void LateUpdate () {
+		// --- Handle Camera Rules/Automatic Movement --- //
+		//CameraRules();
+
+
 		// --- Follow the player --- //
 		if(playerPosLastFrame != Player.transform.position) {
 			transform.position += Player.transform.position - playerPosLastFrame;
@@ -56,5 +63,25 @@ public class CameraController : MonoBehaviour {
 		transform.RotateAround(Player.transform.position, transform.right, -v);
 
 		Debug.DrawRay(transform.position, transform.forward * 500, Color.red);
+	}
+
+
+
+	// Random Camera Rules
+	void CameraRules() {
+		// If a raycast from the player to the camera is blocked, jump to the closest unoccluded position
+		Vector3 playerToCamera = transform.position - Player.transform.position;
+		float dist = playerToCamera.magnitude;
+		//print(dist);
+		Vector3 dir = playerToCamera.normalized;
+		int mask = ~LayerMask.GetMask("Player");
+		RaycastHit hitInfo;
+		if(Physics.Raycast(Player.transform.position, playerToCamera, out hitInfo, distanceFromPlayer, mask)) {
+			print(hitInfo.transform.name);
+			transform.position = hitInfo.point;
+		} else {
+			transform.position = Player.transform.position + distanceFromPlayer * dir;
+		}
+
 	}
 }
