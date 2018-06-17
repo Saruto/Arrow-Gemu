@@ -60,9 +60,16 @@ public class CameraController : MonoBehaviour {
 
 		// --- Vertical Rotation Controls --- //
 		float v = VerticalSpeed * Input.GetAxis("Mouse Y");
-		transform.RotateAround(Player.transform.position, transform.right, -v);
+		// clamp from -25 to 45
+		const float lowerBound = -25f;
+		const float upperBound = 45f;
+		float target = transform.rotation.eulerAngles.x + -v;
+		if(target > 180) target -= 360f;
+		if(lowerBound < target && target < upperBound) {
+			transform.RotateAround(Player.transform.position, transform.right, -v);
+			Debug.DrawRay(transform.position, transform.forward * 500, Color.red);
+		}
 
-		Debug.DrawRay(transform.position, transform.forward * 500, Color.red);
 	}
 
 
