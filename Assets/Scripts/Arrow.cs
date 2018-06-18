@@ -5,14 +5,13 @@ using UnityEngine;
 public class Arrow : MonoBehaviour {
 	// ----------------------------------- Fields and Properties ----------------------------------- //
 
+	// The rigidbody attached to this gameobject
+	Rigidbody rb;
+
 	// Has this arrow hit something yet?
 	bool hitAnything = false;
 
 	//  --------- Serialized Fields ---------  //
-
-	// The rigidbodies attached to this gameobject
-	[SerializeField] Rigidbody HeadRB;
-	[SerializeField] Rigidbody BodyRB;
 
 	// Amount of damage an arrow deals
 	[SerializeField] int ArrowDamage;
@@ -54,12 +53,10 @@ public class Arrow : MonoBehaviour {
 
 			// Stick to the enemy.
 			if(ArrowsStick == StickToEnemies.Yes || (ArrowsStick == StickToEnemies.Random && Random.value > 0.5f)){
-				HeadRB.velocity = Vector3.zero;
-				BodyRB.velocity = Vector3.zero;
+				rb.velocity = Vector3.zero;
 				// push the arrow a bit inside the enemy
 				//transform.position += 0.2f * (collision.contacts[0].point - transform.position).normalized;
-				Destroy(HeadRB);
-				Destroy(BodyRB);
+				Destroy(rb);
 				Destroy(GetComponent<Collider>());
 				transform.SetParent(collision.collider.transform);
 			}
