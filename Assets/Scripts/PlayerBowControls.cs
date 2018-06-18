@@ -122,9 +122,7 @@ public class PlayerBowControls : MonoBehaviour {
 		arrow.transform.position += startForwardsOffset * forceDir;
 		arrow.transform.position += startUpOffset * transform.up;
 		// Push it forwads.
-		arrow.GetComponent<Rigidbody>().AddForce(ArrowForce * forceDir, ForceMode.Impulse);
-		Destroy(arrow, 5f);
-
+		arrow.GetComponentsInChildren<Rigidbody>()[1].AddForce(ArrowForce * forceDir, ForceMode.Impulse);
 		Debug.DrawRay(arrow.transform.position, forceDir * 500, Color.green, 2f);
 	}
 
