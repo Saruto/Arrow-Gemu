@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33786275141936032}
   - component: {fileID: 23474618206095952}
   - component: {fileID: 54732295128398680}
-  - component: {fileID: 135555542465889076}
+  - component: {fileID: 136446912911451882}
   m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
@@ -64,7 +64,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1951158059285408
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,7 +103,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4113591064293958
 Transform:
   m_ObjectHideFlags: 1
@@ -416,8 +416,21 @@ MonoBehaviour:
   BodyRB: {fileID: 54030562887160350}
   ArrowDamage: 1
   ArrowsStick: 2
---- !u!135 &135555542465889076
-SphereCollider:
+--- !u!136 &136330154586777152
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1951158059285408}
+  m_Material: {fileID: 13400000, guid: 5471c7ded48d3284f93b2841eccaea54, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.0000005
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &136446912911451882
+CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -425,20 +438,8 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.22
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &136330154586777152
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1951158059285408}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2.0000005
+  m_Radius: 0.92
+  m_Height: 2.62
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!138 &138036705019274278
