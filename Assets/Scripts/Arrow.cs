@@ -25,6 +25,7 @@ public class Arrow : MonoBehaviour {
 
 	//  --------- Start ---------  //
 	void Start () {
+		rb = GetComponent<Rigidbody>();
 		Destroy(gameObject, 5f);
 	}
 	
@@ -33,8 +34,7 @@ public class Arrow : MonoBehaviour {
 
 		// Rotate until it hits something
 		if(!hitAnything) {
-			//transform.Rotate(rb.velocity.normalized, 100f * Time.deltaTime);
-			
+			//rb.AddTorque(rb.velocity.normalized * 10f);
 		}
 	}
 
@@ -44,21 +44,23 @@ public class Arrow : MonoBehaviour {
 
 	}
 
-	// OnCollisionEnter - Deal damage to enemies.
-	void OnCollisionEnter(Collision collision) {
+	// OnTriggerEnter - Deal damage to enemies.
+	void OnTriggerEnter(Collider collider) {
 		// Hitting an enemy.
-		if(collision.collider.tag == "Enemy" && !hitAnything) {
+		if(collider.tag == "Enemy" && !hitAnything) {
 			// Deal damage
-			collision.collider.GetComponent<EnemyStats>().TakeDamage(ArrowDamage);
+			collider.GetComponent<Enemy>().TakeDamage(ArrowDamage);
 
 			// Stick to the enemy.
 			if(ArrowsStick == StickToEnemies.Yes || (ArrowsStick == StickToEnemies.Random && Random.value > 0.5f)){
-				rb.velocity = Vector3.zero;
-				// push the arrow a bit inside the enemy
+				Destroy(gameObject);
+				//rb.velocity = Vector3.zero;
 				//transform.position += 0.2f * (collision.contacts[0].point - transform.position).normalized;
-				Destroy(rb);
-				Destroy(GetComponent<Collider>());
-				transform.SetParent(collision.collider.transform);
+				//rb.Sleep();
+				//Destroy(rb);
+				//Destroy(GetComponentInChildren<Collider>());
+				//print(transform.position);
+				//transform.SetParent(collider.transform);
 			}
 		}
 		// Mark as hitting something
