@@ -1624,11 +1624,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4191526617980746, guid: 6b3156375445fd04bb28bf4de9b7826d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 2.215
+      value: 2.89
       objectReference: {fileID: 0}
     - target: {fileID: 4191526617980746, guid: 6b3156375445fd04bb28bf4de9b7826d, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 25.02
+      value: 16.7
       objectReference: {fileID: 0}
     - target: {fileID: 4191526617980746, guid: 6b3156375445fd04bb28bf4de9b7826d, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1649,6 +1649,31 @@ Prefab:
     - target: {fileID: 4191526617980746, guid: 6b3156375445fd04bb28bf4de9b7826d, type: 2}
       propertyPath: m_RootOrder
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114347839370236126, guid: 6b3156375445fd04bb28bf4de9b7826d,
+        type: 2}
+      propertyPath: Health
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 195606253474996918, guid: 6b3156375445fd04bb28bf4de9b7826d,
+        type: 2}
+      propertyPath: m_BaseOffset
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 136045520753964244, guid: 6b3156375445fd04bb28bf4de9b7826d,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 136045520753964244, guid: 6b3156375445fd04bb28bf4de9b7826d,
+        type: 2}
+      propertyPath: m_Height
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 136045520753964244, guid: 6b3156375445fd04bb28bf4de9b7826d,
+        type: 2}
+      propertyPath: m_Center.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6b3156375445fd04bb28bf4de9b7826d, type: 2}
@@ -2059,6 +2084,26 @@ MonoBehaviour:
   LockCursor: 1
   HorizontalSpeed: 2
   VerticalSpeed: 2
+--- !u!1 &1897712439 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1563974045201778, guid: 6b3156375445fd04bb28bf4de9b7826d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1727789820}
+--- !u!54 &1897712446
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1897712439}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &2023038281
 GameObject:
   m_ObjectHideFlags: 0

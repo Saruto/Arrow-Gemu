@@ -8,6 +8,9 @@ public class Arrow : MonoBehaviour {
 	// The rigidbody attached to this gameobject
 	Rigidbody rb;
 
+	// The player GO
+	GameObject player;
+
 	// Has this arrow hit something yet?
 	bool hitAnything = false;
 
@@ -16,16 +19,13 @@ public class Arrow : MonoBehaviour {
 	// Amount of damage an arrow deals
 	[SerializeField] int ArrowDamage;
 
-	// Should Arrows stick to enemies?
-	enum StickToEnemies { No, Random, Yes }
-	[SerializeField] StickToEnemies ArrowsStick;
-
 	// ------------------------------------------ Methods ------------------------------------------ //
 
 
 	//  --------- Start ---------  //
 	void Start () {
 		rb = GetComponent<Rigidbody>();
+		player = GameObject.FindWithTag("Player");
 		Destroy(gameObject, 5f);
 	}
 	
@@ -51,17 +51,15 @@ public class Arrow : MonoBehaviour {
 			// Deal damage
 			collider.GetComponent<Enemy>().TakeDamage(ArrowDamage);
 
-			// Stick to the enemy.
-			if(ArrowsStick == StickToEnemies.Yes || (ArrowsStick == StickToEnemies.Random && Random.value > 0.5f)){
-				Destroy(gameObject);
-				//rb.velocity = Vector3.zero;
-				//transform.position += 0.2f * (collision.contacts[0].point - transform.position).normalized;
-				//rb.Sleep();
-				//Destroy(rb);
-				//Destroy(GetComponentInChildren<Collider>());
-				//print(transform.position);
-				//transform.SetParent(collider.transform);
-			}
+			// Push the enemy back.
+			Vector3 dir = collider.transform.position - player.transform.position;
+			dir.y = 0f;
+			dir.Normalize();
+			dir = Quaternion.AngleAxis(30f, collider.transform.right) * dir;
+			collider.GetComponent<Enemy>().PushBack(dir);
+
+			// Destroy the arrow immediately
+			Destroy(gameObject);
 		}
 		// Mark as hitting something
 		hitAnything = true;

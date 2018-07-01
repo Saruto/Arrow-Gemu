@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour {
 	
 	//  --------- Update ---------  //
 	void Update () {
-		if(agent != null) {
+		if(agent != null && agent.enabled) {
 			agent.SetDestination(Player.transform.position);
 		}
 		
@@ -44,5 +44,23 @@ public class Enemy : MonoBehaviour {
 		if(Health <= 0) {
 			Destroy(gameObject);
 		}
+	}
+
+	// Pushes the enemy back some direction. Used when hit with normal arrows.
+	public void PushBack(Vector3 direction, float mag = 10f) {
+		StartCoroutine(push(direction * mag));
+	}
+
+	IEnumerator push(Vector3 force) {
+		agent.enabled = false;
+		GetComponent<Rigidbody>().isKinematic = false;
+		GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+		float accum = 0f;
+		while(accum < 1f) {
+			yield return null;
+			accum += Time.deltaTime;
+		}
+		GetComponent<Rigidbody>().isKinematic = true;
+		agent.enabled = true;
 	}
 }
