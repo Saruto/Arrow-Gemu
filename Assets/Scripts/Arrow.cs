@@ -61,8 +61,11 @@ public class Arrow : MonoBehaviour {
 			// Destroy the arrow immediately
 			Destroy(gameObject);
 		}
-		// Mark as hitting something
-		hitAnything = true;
+
+		if(collider.tag != "Player"){
+			// Mark as hitting something
+			hitAnything = true;
+		}
 	}
 
 

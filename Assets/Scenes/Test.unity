@@ -1675,6 +1675,10 @@ Prefab:
       propertyPath: m_Center.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1563974045201778, guid: 6b3156375445fd04bb28bf4de9b7826d, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6b3156375445fd04bb28bf4de9b7826d, type: 2}
   m_IsPrefabParent: 0
