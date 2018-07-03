@@ -126,7 +126,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	//  --------- Public Functions ---------  //
 	// Pushes the player back some direction.
-	public void PushBack(Vector3 direction, float speed = 10f) {
+	public void PushBack(Vector3 direction, float speed = 100f) {
 		canMove = false;
 		moveDirection = direction * speed;
 		StartCoroutine(GlobalFunctions.Invoke(() => { canMove = true; }, 1f));

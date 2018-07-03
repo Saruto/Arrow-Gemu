@@ -56,11 +56,11 @@ public class Enemy : MonoBehaviour {
 			// Deal damage
 			other.GetComponent<Player>().TakeDamage(1);
 
-			// Push the enemy back.
+			// Push the player back.
 			Vector3 dir = other.transform.position - transform.position;
 			dir.y = 0f;
 			dir.Normalize();
-			dir = Quaternion.AngleAxis(30f, other.transform.right) * dir;
+			dir = Quaternion.AngleAxis(60f, Vector3.Cross(dir, Vector3.up)) * dir;
 			other.GetComponent<PlayerMovement>().PushBack(dir);
 		}
 	}
@@ -77,8 +77,10 @@ public class Enemy : MonoBehaviour {
 	// Pushes the enemy back some direction. Used when hit with normal arrows.
 	public void PushBack(Vector3 direction, float mag = 10f) {
 		// Push the enemy and deactivate the agent
-		if(agent != null) agent.enabled = false;
-		GetComponent<Rigidbody>().isKinematic = false;
-		GetComponent<Rigidbody>().AddForce(direction * mag, ForceMode.Impulse);
+		if(agent != null) {
+			agent.enabled = false;
+			GetComponent<Rigidbody>().isKinematic = false;
+			GetComponent<Rigidbody>().AddForce(direction * mag, ForceMode.Impulse);
+		}
 	}
 }
