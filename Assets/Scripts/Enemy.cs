@@ -14,11 +14,7 @@ public class Enemy : MonoBehaviour {
 
 	// Components that this gameobject has.
 	NavMeshAgent agent;
-	CapsuleCollider collider;
-
-	// Variables for controlling the push-back part of enemies
-	float pushBackTimer = 0f;
-	bool pushBackRunning = false;
+	CapsuleCollider col;
 
 	//  --------- Serialized Fields ---------  //
 
@@ -30,14 +26,14 @@ public class Enemy : MonoBehaviour {
 	//  --------- Start ---------  //
 	void Start () {
 		agent = GetComponent<NavMeshAgent>();
-		collider = GetComponent<CapsuleCollider>();
+		col = GetComponent<CapsuleCollider>();
 		Player = GameObject.FindWithTag("Player");
 	}
 	
 	//  --------- Update ---------  //
 	void Update () {
 		// Follow the player
-		if(agent != null && agent.enabled) {
+		if(Player != null && agent != null && agent.enabled) {
 			agent.SetDestination(Player.transform.position);
 		}
 		
@@ -45,12 +41,28 @@ public class Enemy : MonoBehaviour {
 		if(agent != null && !agent.enabled) {
 			RaycastHit hit;
 			LayerMask mask = ~LayerMask.GetMask("Player", "Enemy");
-			if(Physics.Raycast(transform.position, Vector3.down, out hit, collider.bounds.extents.y + 0.05f, mask)) {
+			if(Physics.Raycast(transform.position, Vector3.down, out hit, col.bounds.extents.y + 0.05f, mask)) {
 				GetComponent<Rigidbody>().isKinematic = true;
 				agent.enabled = true;
 			}
 		}
 
+	}
+
+	//  --------- OnTriggerEnter ---------  //
+	void OnTriggerEnter(Collider other) {
+		// Hit the player when we get close enough to them
+		if(other.tag == "Player") {
+			// Deal damage
+			other.GetComponent<Player>().TakeDamage(1);
+
+			// Push the enemy back.
+			Vector3 dir = other.transform.position - transform.position;
+			dir.y = 0f;
+			dir.Normalize();
+			dir = Quaternion.AngleAxis(30f, other.transform.right) * dir;
+			other.GetComponent<PlayerMovement>().PushBack(dir);
+		}
 	}
 
 
@@ -65,7 +77,7 @@ public class Enemy : MonoBehaviour {
 	// Pushes the enemy back some direction. Used when hit with normal arrows.
 	public void PushBack(Vector3 direction, float mag = 10f) {
 		// Push the enemy and deactivate the agent
-		agent.enabled = false;
+		if(agent != null) agent.enabled = false;
 		GetComponent<Rigidbody>().isKinematic = false;
 		GetComponent<Rigidbody>().AddForce(direction * mag, ForceMode.Impulse);
 	}

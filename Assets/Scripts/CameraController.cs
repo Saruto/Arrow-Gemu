@@ -45,8 +45,9 @@ public class CameraController : MonoBehaviour {
 	//  --------- LateUpdate ---------  //
 	void LateUpdate () {
 		// --- Handle Camera Rules/Automatic Movement --- //
-		//CameraRules();
+		if(Player == null) return;
 
+		//CameraRules();
 
 		// --- Follow the player --- //
 		if(playerPosLastFrame != Player.transform.position) {

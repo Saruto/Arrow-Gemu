@@ -5,9 +5,6 @@ using UnityEngine;
 public class Arrow : MonoBehaviour {
 	// ----------------------------------- Fields and Properties ----------------------------------- //
 
-	// The rigidbody attached to this gameobject
-	Rigidbody rb;
-
 	// The player GO
 	GameObject player;
 
@@ -24,14 +21,12 @@ public class Arrow : MonoBehaviour {
 
 	//  --------- Start ---------  //
 	void Start () {
-		rb = GetComponent<Rigidbody>();
 		player = GameObject.FindWithTag("Player");
 		Destroy(gameObject, 5f);
 	}
 	
 	//  --------- Update ---------  //
 	void Update () {
-
 		// Rotate until it hits something
 		if(!hitAnything) {
 			//rb.AddTorque(rb.velocity.normalized * 10f);
@@ -45,24 +40,25 @@ public class Arrow : MonoBehaviour {
 	}
 
 	// OnTriggerEnter - Deal damage to enemies.
-	void OnTriggerEnter(Collider collider) {
+	void OnTriggerEnter(Collider other) {
 		// Hitting an enemy.
-		if(collider.tag == "Enemy" && !hitAnything) {
+		if(other.tag == "Enemy" && !hitAnything) {
 			// Deal damage
-			collider.GetComponent<Enemy>().TakeDamage(ArrowDamage);
+			other.GetComponent<Enemy>().TakeDamage(ArrowDamage);
 
 			// Push the enemy back.
-			Vector3 dir = collider.transform.position - player.transform.position;
+			Vector3 dir = other.transform.position - player.transform.position;
 			dir.y = 0f;
 			dir.Normalize();
-			dir = Quaternion.AngleAxis(30f, collider.transform.right) * dir;
-			collider.GetComponent<Enemy>().PushBack(dir);
+			dir = Quaternion.AngleAxis(30f, other.transform.right) * dir;
+			other.GetComponent<Enemy>().PushBack(dir);
 
 			// Destroy the arrow immediately
 			Destroy(gameObject);
 		}
 
-		if(collider.tag != "Player"){
+		// If we hit a non-trigger collider, set hitAnything to true.
+		if(other.tag != "Player" && !other.isTrigger){
 			// Mark as hitting something
 			hitAnything = true;
 		}

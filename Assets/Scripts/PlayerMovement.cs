@@ -5,18 +5,27 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 	// ----------------------------------- Fields and Properties ----------------------------------- //
-	
+		
 	// Components on this Character Gameobject
 	public CharacterController charController { get; private set; }
 	Vector3 moveDirection = Vector3.zero;
 
-	// Number of available mid-air jumps left for the player.
-	int airJumpsLeft = 1;
-
+	
+	// --- Controller Variables --- //
+	// External
 	// Locks the player's rotation to that of the camera when active.
 	// Used by the bow controller.
 	[NonSerialized] public bool LookWithCamera = false;
 
+	// Internal
+	// Number of available mid-air jumps left for the player.
+	int airJumpsLeft = 1;
+
+	// Can turn off the player's ability to control movement.
+	bool canMove = true;
+
+
+	// --- Properties --- //
 	// The camera's forwards and right vectors, parallel to the XZ plane
 	Vector3 cameraPlanarForwards {
 		get {
@@ -33,6 +42,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
+
 	//  --------- Serialized Fields ---------  //
 
 	// Speed of movement
@@ -47,9 +57,8 @@ public class PlayerMovement : MonoBehaviour {
 	// Gravity Scale
 	[SerializeField] float Gravity;
 
+
 	// ------------------------------------------ Methods ------------------------------------------ //
-
-
 	//  --------- Start ---------  //
 	void Start () {
 		charController = GetComponent<CharacterController>();
@@ -58,47 +67,49 @@ public class PlayerMovement : MonoBehaviour {
 	//  --------- Update ---------  //
 	void Update () {
 		// --- Simple Movement --- //
-		if(charController.isGrounded){
-			moveDirection = Vector3.zero;
-		} else {
-			moveDirection = new Vector3(0f, moveDirection.y, 0f);
-		}
+		if(canMove) {
+			if(charController.isGrounded){
+				moveDirection = Vector3.zero;
+			} else {
+				moveDirection = new Vector3(0f, moveDirection.y, 0f);
+			}
 
-		// Forwards/Backwards
-		if(Input.GetKey(KeyCode.W)) {
-			moveDirection += cameraPlanarForwards;
-		} else if(Input.GetKey(KeyCode.S)) {
-			moveDirection += -cameraPlanarForwards;
-		}
+			// Forwards/Backwards
+			if(Input.GetKey(KeyCode.W)) {
+				moveDirection += cameraPlanarForwards;
+			} else if(Input.GetKey(KeyCode.S)) {
+				moveDirection += -cameraPlanarForwards;
+			}
 
-		// Right/Left
-		if(Input.GetKey(KeyCode.D)) {
-			moveDirection += cameraPlanarRight;
-		} else if(Input.GetKey(KeyCode.A)) {
-			moveDirection += -cameraPlanarRight;
-		}
+			// Right/Left
+			if(Input.GetKey(KeyCode.D)) {
+				moveDirection += cameraPlanarRight;
+			} else if(Input.GetKey(KeyCode.A)) {
+				moveDirection += -cameraPlanarRight;
+			}
 
-		// Set the magnitude
-		moveDirection.x *= MovementSpeed;
-		moveDirection.z *= MovementSpeed;
+			// Set the magnitude
+			moveDirection.x *= MovementSpeed;
+			moveDirection.z *= MovementSpeed;
 
-		// --- Jumping --- //
-		if(Input.GetKeyDown(KeyCode.Space) && (charController.isGrounded || airJumpsLeft > 0)) {
-			moveDirection.y = JumpingSpeed;
-			if(!charController.isGrounded) --airJumpsLeft;
-		}
+			// --- Jumping --- //
+			if(Input.GetKeyDown(KeyCode.Space) && (charController.isGrounded || airJumpsLeft > 0)) {
+				moveDirection.y = JumpingSpeed;
+				if(!charController.isGrounded) --airJumpsLeft;
+			}
 
-		// Reset jumpsleft while gounded.
-		else if(charController.isGrounded) {
-			airJumpsLeft = 1;
-		}
+			// Reset jumpsleft while gounded.
+			else if(charController.isGrounded) {
+				airJumpsLeft = 1;
+			}
 
-		/*
-		// Set the player's upwards velocity to 0 when releasing the space key mid jump ("glass ceiling effect")
-		if(Input.GetKeyUp(KeyCode.Space) && !charController.isGrounded && moveDirection.y > 0) {
-			moveDirection.y = 0f;
+			/*
+			// Set the player's upwards velocity to 0 when releasing the space key mid jump ("glass ceiling effect")
+			if(Input.GetKeyUp(KeyCode.Space) && !charController.isGrounded && moveDirection.y > 0) {
+				moveDirection.y = 0f;
+			}
+			*/
 		}
-		*/
 
 		// --- Applying Movement --- //
 		moveDirection.y -= Gravity * Time.deltaTime;
@@ -112,6 +123,17 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
+
+	//  --------- Public Functions ---------  //
+	// Pushes the player back some direction.
+	public void PushBack(Vector3 direction, float speed = 10f) {
+		canMove = false;
+		moveDirection = direction * speed;
+		StartCoroutine(GlobalFunctions.Invoke(() => { canMove = true; }, 1f));
+	}
+
+
+	//  --------- Helper Functions ---------  //
 	// Rotates the player towards the direction they're moving.
 	void RotateTowardsMovement() {
 		// Get movement direction vector. Based on velocity and input direction.
@@ -137,6 +159,7 @@ public class PlayerMovement : MonoBehaviour {
 		Vector3 newDir = Vector3.RotateTowards(transform.forward, facingDirection, RotationSpeed * Time.deltaTime, 0f);
 		transform.rotation = Quaternion.LookRotation(newDir);
 	}
+
 
 
 
